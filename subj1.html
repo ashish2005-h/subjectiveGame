@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<title>DCD Drag-and-Drop Cards Game</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="subcss.css">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+<script type="text/javascript">
+
+var correctCards = 0;
+$( init );
+
+function init() {
+
+  // Hide the success message
+  $('#successMessage').hide();
+  $('#successMessage').css( {
+    left: '580px',
+    top: '250px',
+    width: 0,
+    height: 0
+  } );
+
+  // Reset the game
+  correctCards = 0;
+  $('#cardPile').html( '' );
+  $('#cardSlots').html( '' );
+
+  // Create the pile of shuffled cards
+  // creating an array and passing the number, questions, options, and answers
+let questions = [
+    {
+        numb: 1,
+        question: "<img src ='q1.png';>",
+        answer: "<img src ='a1.png';>",
+        options: [
+            "00",
+            "01",
+            "10",
+            "11"
+        ]
+    },
+    {
+        numb: 2,
+        question:"Write the equation for distributive law and commutative law ",
+        answer: "<img src = 'a3.png'>",
+        options: [
+            "OR",
+            "AND",
+            "XOR",
+            "NAND"
+        ]
+    },
+    {
+        numb: 3,
+        question: "What is universal gates?  ",
+        answer: "A universal gate is a gate which can implement any Boolean function without need to use any other gate type. The NAND and NOR gates are universal gates. In practice, this is advantageous since NAND and NOR gates are economical and easier to fabricate and are the basic gates used in all IC digital logic families.",
+        options: [
+            "NAND & NOR",
+            "AND & OR",
+            "XOR & OR",
+            "EX-NOR & XOR"
+        ]
+    },
+    {
+        numb: 4,
+        question: "Solve following Boolean expression A’B’C’ + A’BC’+A’BC+ABC’  ",
+        answer: "<img src = 'a2.png'>",
+        options: [
+            "At least one input is HIGH",
+            "At least one input is LOW",
+            "All inputs are HIGH",
+            "All inputs are LOW"
+        ]
+    },
+    {
+        numb: 5,
+        question: "Write De-morgan’s law:  ",
+        answer: "There are two “de Morgan´s” rules or theorems, a) Two separate terms NOR´ed together is the same as the two terms inverted (Complement) and AND´ed for example:  A+B = A . Bb) Two separate terms NAND´ed together is the same as the two terms inverted (Complement) and OR´ed for example:  A.B = A + B",
+        options: [
+            "AND gates and NOT gates",
+            "AND gates, OR gates, and NOT gates",
+            "OR gates and NOT gates",
+            "OR gates only"
+        ]
+    },
+    {
+    numb: 6,
+    question: "Write truth table for  SOP Q = A.B.C’+A.B’.C+A’B.",
+    answer: "<img src = 'a4.png'>",
+    options: [
+        "Only if both the inputs are high",
+        "Only if both the inputs are low",
+        "Only if one input is high and the other is low",
+        "If at least one input is high"
+    ]
+},
+{
+    numb: 7,
+    question: "Draw Logic Diagram For POS Q= (A+B+C).(A+B’+C).(A’+B+C’).(A+B’+C’) ",
+    answer: "<img src = 'a5.png'>",
+    options: [
+        "Only if both the inputs are high",
+        "Only if both the inputs are low",
+        "Only if one input is high and the other is low",
+        "If at least one input is high"
+    ]
+},
+{
+    numb: 8,
+    question: "Draw the K-Map and obtain the simplified logical expression Y=∑m(1,5,7,9,13,15) Draw the circuit of minimized expression",
+    answer: "<img src = 'a6.png'>",
+    options: [
+        "Associative Law",
+        "Distributive Law",
+        "Commutative Law",
+        "De Morgan's Law"
+    ]
+},    {
+    numb: 9,
+    question: "Simplify the expression given below K-Map and draw equivalent circuit diagram. Y=∑m(1,3,7,11,15)+d(0,2,5)",
+    answer: "<img src = 'a7.png'>",
+    options: [
+        "Inversion followed by an OR gate",
+        "OR gate followed by an inverter",
+        "NOT gate followed by an OR gate",
+        "NAND gate followed by an OR gate"
+        
+    ]
+},    {
+    numb: 10,
+    question: "Simplify the given logic expression Y=πM(0,4,5,11,12,13,14,15) and draw equivalent circuit. ",
+    answer: "<img src = 'a8.png'>",
+    options: [
+        "NOT gate",
+        "OR gate",
+        "AND gate",
+        "None of the above"
+    ]
+},
+    // you can uncomment the below codes and make duplicate as more as you want to add question
+    // but remember you need to give the numb value serialize like 1,2,3,5,6,7,8,9.....
+
+    //   {
+    //   numb: 6,
+    //   question: "Your Question is Here",
+    //   answer: "Correct answer of the question is here",
+    //   options: [
+    //     "Option 1",
+    //     "option 2",
+    //     "option 3",
+    //     "option 4"
+    //   ]
+    // },
+];
+  var numbers = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+  var terms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ];
+  /*numbers.sort( function() { return Math.random() - .5 } ); */
+
+  for ( var i=0; i<10; i++ ) {
+    $('<div>'+questions[i].question+'</div>' ).data( 'number', questions[i].answer ).attr( 'id', 'card'+questions[i].question ).appendTo( '#cardPile' ).draggable( {
+      
+      stack: '#cardPile div',
+      cursor: 'move',
+      revert: true
+    } );
+  }
+
+  // Create the card slots
+  var words = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten' ];
+  for ( var i=0; i<10; i++ ) {
+    $('<div>' + questions[i].answer + '</div>').data( 'number', questions[i].answer ).appendTo( '#cardSlots' ).droppable( {
+      accept: '#cardPile div',
+      hoverClass: 'hovered',
+      drop: handleCardDrop
+    } );
+  }
+
+}
+
+function handleCardDrop( event, ui ) {
+  var slotNumber = $(this).data( 'number' );
+  var cardNumber = ui.draggable.data( 'number' );
+
+  // If the card was dropped to the correct slot,
+  // change the card colour, position it directly
+  // on top of the slot, and prevent it being dragged
+  // again
+
+  if ( slotNumber == cardNumber ) {
+    ui.draggable.addClass( 'correct' );
+    ui.draggable.draggable( 'disable' );
+    $(this).droppable( 'disable' );
+    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+    ui.draggable.draggable( 'option', 'revert', false );
+    correctCards++;
+  } 
+
+  
+  // If all the cards have been placed correctly then display a message
+  // and reset the cards for another go
+
+  if ( correctCards == 10 ) {
+    $('#successMessage').show();
+    $('#successMessage').animate( {
+      left: '380px',
+      top: '200px',
+      width: '400px',
+      height: '100px',
+      opacity: 1
+    } );
+  }
+
+
+ 
+}
+
+</script>
+
+</head>
+<body>
+  <audio id="myAudio">
+    <source src="gamebg.mpeg" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <button class="sound" type="button" onclick="playAudio()">Audio</button>
+<div id="content">
+
+  <div id="cardPile"> </div>
+  <div id="cardSlots"> </div>
+
+  <div id="successMessage">
+    <h2>Congratulations!</h2>
+    <button onclick="init()">Play Again</button>
+  </div>
+
+</div>
+<script>
+  var x = document.getElementById("myAudio");
+  function playAudio() { 
+    if(x.paused) {
+            x.play();
+            x.loop=true;
+
+        }
+        else {
+           myAudio.pause();
+        }
+}
+</script>
+
+
+</body>
+</html>
