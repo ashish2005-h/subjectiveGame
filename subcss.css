@@ -34,7 +34,7 @@ body {
   #content {
     margin: 80px 70px;
     text-align: center;
-    font-size:large;
+    font-size:larger;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
